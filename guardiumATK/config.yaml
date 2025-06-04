@@ -1,0 +1,32 @@
+api:
+  # URL for your Guardium appliance, including port. Default https port is 8443.
+  guardium-api-url: "https://useast.services.cloud.techzone.ibm.com:29406"
+  # Guardium appliance API port (https) - default is 8443
+  guardium-api-port: "29406"
+
+  # You must register a client prior to using any APIs
+  # Full instructions for registering an oAuth client can be found here:
+  # https://www.ibm.com/docs/en/gdp/12.x?topic=commands-using-guardium-rest-apis#using_rest_api__register_api__title__1
+
+  oauth-client-id: "client1"
+  oauth-client-secret: "81399385-6350-46fd-9cb4-ea7c2501cce3"
+
+  # Guardium username with admin privileges. This, along with the OAuth client, will be used to get an access token
+  guardium-admin-username: "jklahn"
+  guardium-admin-password: "Guardium123!"
+
+cli:
+  # Guardium appliance CLI port - default is 22
+  guardium-cli-hostname: "guard.gdemo.com"
+  guardium-cli-port: "22"
+  guardium-cli-username: "cli"
+  guardium-cli-password: "Guardium123!"
+
+  # Optional: SSH proxy for CLI
+  # Use this if having to ssh through a proxy to reach the Guardium CLI/SSH
+  ssh-proxy:
+    enabled: "True"
+    ssh-proxy-hostname: "useast.services.cloud.techzone.ibm.com"
+    ssh-proxy-port: "40759"
+    ssh-proxy-username: "root"
+    ssh-proxy-password: "Data&AISecurity-123!"

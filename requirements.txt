@@ -1,0 +1,7 @@
+pandas
+setuptools
+cryptography
+future
+requests
+PyYAML
+paramiko

@@ -1,0 +1,11 @@
+[project]
+name = "guardium-automation-tool-kit"
+version = "1.0"
+dependencies = [
+    "pandas",
+    "setuptools",
+    "cryptography",
+    "future",
+    "requests",
+    "PyYAML",
+    "paramiko"]
