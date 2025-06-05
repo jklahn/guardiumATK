@@ -1,5 +1,5 @@
 import logging
-from appliance_connections_creator import GuardCLIConnection
+from guardiumATK.appliance_connections_creator import GuardCLIConnection
 from re import compile
 
 """

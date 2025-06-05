@@ -3,9 +3,9 @@ import pandas
 """
 
 The following code creates an instance Guardium REST API - which comes with an access token and REST API functions based 
-on what is in 'guardium_rest_api_functions' module. In this example, I use the 'online_report' REST API to fetch the
+on what is in 'guardium_rest_api_functions' module. In this example, the 'online_report' REST API is used to fetch the
 first 20 rows from the past 30 days of the report. The API returns a list of dictionaries - each representing a row in 
-the report. I then use Pandas to make it look pretty in a tabular format.
+the report. Pandas is then used to make it look pretty in a tabular format.
 
 """
 guardium_api = GuardiumRESTAPI()

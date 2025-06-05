@@ -5,7 +5,7 @@ A library of REST API functions that can be used with a valid GuardiumAPIConnect
 """
 
 from requests import get, post
-from appliance_connections_creator import GuardiumAPIConnection
+from guardiumATK.appliance_connections_creator import GuardiumAPIConnection
 import logging
 
 
@@ -82,6 +82,125 @@ class GuardiumRESTAPI:
                                  'Authorization': 'Bearer ' + self.guard_api.access_token},
                         verify=verify,
                         json=params)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def post_policy_rule_action(self, params, verify=False):
+        """
+        Creates a policy rule action
+
+        :param params: as JSON dictionary
+
+            params={
+                'fromPolicy': 'Basic Data Security Policy',  # str; required -- policy name
+                'ruleDesc': '',  # str; required -- rule name, Example: 'Failed Login - Log Violation'
+                'actionName': 'LOG FULL DETAILS PER SESSION',  # str; required - Examples:
+                # 'LOG ONLY', 'LOG FULL DETAILS PER SESSION', 'ALERT DAILY', 'IGNORE S-TAP SESSION'
+                'actionLevel': '',  # str;
+                'actionParameters': '',  # str;
+                'alertUserLoginName': '',  # str;
+                'classDestination': '',  # str;
+                'messageTemplate': '',  # str; -- Examples: Default, LEEF
+                'notificationType': '',  # str; -- Examples: MAIL, SYSLOG, SNMP
+                'paramSeparator': ''  # str;
+            }
+
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing POST...")
+        response = post(url=self.guard_api.host_url + '/restAPI/' + 'rule_action',
+                        headers={'Content-Type': 'application/json',
+                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
+                        verify=verify,
+                        json=params)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def get_list_of_policies(self, params, verify=False):
+        """
+        Displays a list of available policies or displays details about a single policy.
+
+        :param params: as JSON dictionary
+
+            params={
+                'detail': 1,  # [int]; Display details about a policy (or all policies if you do not specify a
+                    # policyDesc). Valid values: 0(false),1 (true)
+                'policyDesc': '',  # [str] -- The name of one policy to display. If not specified, Guardium returns
+                    # information about all available policies.
+                'verbose': 0,  # [int] -- 0(false),1 (true)
+                'api_target_host': '',  # str; Specifies the target hosts where the API executes
+                    # 'all_managed': execute on all managed units but not the central manager
+                    # 'all': execute on all managed units and the central manager
+                    # 'group:<group name>': execute on all managed units identified by <group name>
+                    #  host name or IP address of the central manager. Example, api_target_host=10.0.1.123
+            }
+
+        :param verify: verifies the SSL connection
+        :return: response: as JSON
+        """
+
+        response = get(url=self.guard_api.host_url + '/restAPI/' + 'policy',
+                       headers={'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + self.guard_api.access_token},
+                       verify=verify,
+                       params=params)  # Example {'reportName': 'Sessions'}
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def get_list_of_policy_rules(self, params, verify=False):
+        """
+        Displays a list of rules for a given policy
+
+        :param params: as JSON dictionary
+
+            params={
+                'policy': '',  # [str][required]; Name of the policy
+                'api_target_host': ''  # [str]; host name or IP address of the central manager
+            }
+
+        :param verify: verifies the SSL connection
+        :return: response: as JSON
+        """
+
+        response = get(url=self.guard_api.host_url + '/restAPI/' + 'rule',
+                       headers={'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + self.guard_api.access_token},
+                       verify=verify,
+                       params=params)  # Example {'reportName': 'Sessions'}
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def get_list_of_policy_rules_detailed(self, params, verify=False):
+        """
+        Displays a list of rules for a given policy and includes ALL the details - like actions and continueToNextRule
+
+        :param params: as JSON dictionary
+
+            params={
+                'policyDesc': '',  # [str][required]; Name of the policy
+                'api_target_host': ''  # [str]; host name or IP address of the central manager
+                'localeLanguage': 0  # [int]; 0 (false), 1 (true)
+            }
+
+        :param verify: verifies the SSL connection
+        :return: response: as JSON
+        """
+
+        response = get(url=self.guard_api.host_url + '/restAPI/' + 'ruleInfoFromPolicy',
+                       headers={'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + self.guard_api.access_token},
+                       verify=verify,
+                       params=params)  # Example {'reportName': 'Sessions'}
 
         check_for_response_errors(response)
 

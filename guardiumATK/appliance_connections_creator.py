@@ -6,7 +6,10 @@ import logging
 from time import sleep
 
 # import configuration from yaml
-with open("config.yaml", "r") as config_file:
+with open("../guardiumATK/config.yaml", "r") as config_file:
+    """
+    Opens the config.yaml and turns it into a dictionary so key/value pairs can be read later on.
+    """
     try:
         configs = yaml.safe_load(config_file)
         logging.info('Successfully opened config.yaml.')
