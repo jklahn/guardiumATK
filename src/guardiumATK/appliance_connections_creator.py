@@ -234,12 +234,12 @@ class GuardCLIConnection:
         # close the SSH session
         self.guardium_cli.close()
 
-    def run_cli_cmd(self, cli_cmd, str_to_match_in_output='', timeout_counter=30, sleep_time_increment=0.5,
+    def run_cli_cmd(self, cli_cmd, strs_to_match_in_output, timeout_counter=30, sleep_time_increment=0.5,
                     enter_key='\n'):
         """
 
         :param cli_cmd: CLI command to run. Do not include the enter key.
-        :param str_to_match_in_output: String that shows the command has fully run
+        :param strs_to_match_in_output: List of strings. If any match, it shows the command completed
         :param timeout_counter: Time to wait before giving up on the command to complete (seconds)
         :param sleep_time_increment: How long to wait before checking if the command completed
         :param enter_key: character that submits the command
@@ -264,9 +264,10 @@ class GuardCLIConnection:
                 if self.display:
                     print(output)
 
-                if str_to_match_in_output in output:
-                    accumulated_output += output
-                    return accumulated_output  # match string found, command completed, leave the loop
+                for string in strs_to_match_in_output:
+                    if string in output:
+                        accumulated_output += output
+                        return accumulated_output  # match string found, command completed, leave the loop
 
                 else:
                     accumulated_output += output  # append the difference to the accumulated string
