@@ -1,6 +1,15 @@
 [project]
-name = "guardium-automation-tool-kit"
+name = "guardiumATK"
 version = "1.0"
+description = "Provides a pythonic foundation to leverage Guardium REST APIs and CLI APIs to automate tasks in Guardium"
+classifiers=[
+    'Development Status :: 2 - Pre-Alpha',
+    'Intended Audience :: System Administrators',
+    'Programming Language :: Python :: 3 :: Only',
+]
+license = "Apache-2.0"
+license-files = [ "LICENSE"]
+requires-python = ">=3.8,!=3.9.0,!=3.9.1"
 dependencies = [
     "pandas",
     "setuptools",
@@ -9,3 +18,8 @@ dependencies = [
     "requests",
     "PyYAML",
     "paramiko"]
+
+[project.urls]
+homepage = "https://github.com/jklahn/guardiumATK"
+source = "https://github.com/guardiumATK"
+issues = "https://github.com/guardiumATK/issues"

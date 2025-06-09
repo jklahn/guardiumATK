@@ -5,17 +5,34 @@ from paramiko import SSHClient, AutoAddPolicy, SSHException
 import logging
 from time import sleep
 
-# import configuration from yaml
-with open("../guardiumATK/config.yaml", "r") as config_file:
-    """
-    Opens the config.yaml and turns it into a dictionary so key/value pairs can be read later on.
-    """
-    try:
-        configs = yaml.safe_load(config_file)
-        logging.info('Successfully opened config.yaml.')
+# set global dictionary used for storing imported configurations
+imported_configs = {}
 
-    except yaml.YAMLError as exc:
-        logging.critical(Exception('Failed to load configurations from config.yaml file', exc))
+
+def import_config(config_yaml_path, config_dict):
+
+    global imported_configs
+
+    # If using config.yaml, attempt import configuration from yaml
+    if config_yaml_path:
+
+        with open(config_yaml_path, "r") as config_file:
+            """
+            Opens the config.yaml and turns it into a dictionary so key/value pairs can be read later on.
+            """
+            try:
+                imported_configs = yaml.safe_load(config_file)
+                logging.info('Successfully opened config.yaml.')
+
+            except yaml.YAMLError as exc:
+                logging.critical(Exception('Failed to load configurations from config.yaml file', exc))
+
+    elif config_dict:
+        imported_configs = config_dict
+
+    else:
+        logging.critical(Exception('Configuration was not passed. Supply a path to the config.yaml or pass the config'
+                                   'as a python dictionary'))
 
 
 class GuardiumAPIConnection:
@@ -33,18 +50,22 @@ class GuardiumAPIConnection:
     host_url = ''
     access_token = ''
 
-    def __init__(self):
+    def __init__(self, config_yaml_path=None, config_dict=None):
         """
 
         Uses the values from config.yaml file to connect to a guardium appliance and get an access token
 
         """
 
-        self.host_url = configs['api']['guardium-api-url']
-        guardium_oauth_client_id = configs['api']['oauth-client-id']
-        guardium_oauth_client_secret = configs['api']['oauth-client-secret']
-        guardium_admin_user = configs['api']['guardium-admin-username']
-        guardium_admin_password = configs['api']['guardium-admin-password']
+        import_config(config_yaml_path=config_yaml_path, config_dict=config_dict)
+
+        global imported_configs
+
+        self.host_url = imported_configs['api']['guardium-api-url']
+        guardium_oauth_client_id = imported_configs['api']['oauth-client-id']
+        guardium_oauth_client_secret = imported_configs['api']['oauth-client-secret']
+        guardium_admin_user = imported_configs['api']['guardium-admin-username']
+        guardium_admin_password = imported_configs['api']['guardium-admin-password']
 
         logging.info('Successfully set API values based on config.yaml.')
 
@@ -63,7 +84,8 @@ class GuardiumAPIConnection:
 
         if response.status_code != 200:
             logging.critical(
-                Exception("Error generating the access token needed as part of oAuth", response.status_code))
+                Exception("Error generating the access token needed as part of oAuth: " + response.text,
+                          response.status_code))
             raise
 
         else:
@@ -82,24 +104,27 @@ class GuardCLIConnection:
     is_proxy_ssh_active = False
     display = False
 
-    def __init__(self, missing_host_key_policy=True, display=False):
+    def __init__(self, missing_host_key_policy=True, display=False, config_yaml_path=None, config_dict=None):
 
+        import_config(config_yaml_path=config_yaml_path, config_dict=config_dict)
+
+        global imported_configs
         self.display = display
 
         # Fetch the values from config.yaml
-        cli_hostname = configs['cli']['guardium-cli-hostname']
-        cli_port = configs['cli']['guardium-cli-port']
-        cli_username = configs['cli']['guardium-cli-username']
-        cli_password = configs['cli']['guardium-cli-password']
+        cli_hostname = imported_configs['cli']['guardium-cli-hostname']
+        cli_port = imported_configs['cli']['guardium-cli-port']
+        cli_username = imported_configs['cli']['guardium-cli-username']
+        cli_password = imported_configs['cli']['guardium-cli-password']
 
         # If using a proxy SSH to get to Guardium CLI
-        if configs['cli']['ssh-proxy']['enabled'] == 'True':
+        if imported_configs['cli']['ssh-proxy']['enabled'] == 'True':
 
             # Get the proxy values from config.yaml
-            ssh_proxy_hostname = configs['cli']['ssh-proxy']['ssh-proxy-hostname']
-            ssh_proxy_port = configs['cli']['ssh-proxy']['ssh-proxy-port']
-            ssh_proxy_username = configs['cli']['ssh-proxy']['ssh-proxy-username']
-            ssh_proxy_password = configs['cli']['ssh-proxy']['ssh-proxy-password']
+            ssh_proxy_hostname = imported_configs['cli']['ssh-proxy']['ssh-proxy-hostname']
+            ssh_proxy_port = imported_configs['cli']['ssh-proxy']['ssh-proxy-port']
+            ssh_proxy_username = imported_configs['cli']['ssh-proxy']['ssh-proxy-username']
+            ssh_proxy_password = imported_configs['cli']['ssh-proxy']['ssh-proxy-password']
 
             # Make an SSH connection to the proxy
             try:

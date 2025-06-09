@@ -1,5 +1,5 @@
 import logging
-from guardiumATK.appliance_connections_creator import GuardCLIConnection
+from guardiumATK import appliance_connections_creator
 from re import compile
 
 """
@@ -18,9 +18,11 @@ def check_for_cli_errors(cmd, result, success_str='ok'):
 
 class GuardiumCLI:
 
-    def __init__(self, display=False):
+    def __init__(self, display=False, config_yaml_path=None, config_dict=None):
         # Starts a valid CLI SSH session using settings in config.yaml file
-        self.guard_cli = GuardCLIConnection(display=display)
+        self.guard_cli = appliance_connections_creator.GuardCLIConnection(display=display,
+                                                                          config_yaml_path=config_yaml_path,
+                                                                          config_dict=config_dict)
 
     def get_appliance_type(self):
         """

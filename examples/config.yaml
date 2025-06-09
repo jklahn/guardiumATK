@@ -1,12 +1,11 @@
 api:
   # URL for your Guardium appliance, including port. Default https port is 8443.
   guardium-api-url: "https://guard.gdemo.com:8443"
-  # Guardium appliance API port (https) - default is 8443
-  guardium-api-port: "8443"
 
   # You must register a client prior to using any REST APIs
   # Full instructions for registering an oAuth client can be found here:
   # https://www.ibm.com/docs/en/gdp/12.x?topic=commands-using-guardium-rest-apis#using_rest_api__register_api__title__1
+  # example: grdapi register_oauth_client client_id=client1 grant_types="password"
 
   oauth-client-id: "client1"
   oauth-client-secret: "81399384-6351-46fd-9cb3-ea7c2501cce3"

@@ -11,7 +11,7 @@ Reference: https://www.ibm.com/docs/en/gdp/12.x?topic=reference-list-policy-rule
 Policy API commands: https://www.ibm.com/docs/en/gdp/12.x?topic=commands-policy-rule-apis
 """
 
-guardium_api = GuardiumRESTAPI()
+guardium_api = GuardiumRESTAPI(config_yaml_path="./test_config.yaml")
 
 # returns a list of policy rules - each rule is a dictionary
 result = guardium_api.get_list_of_policy_rules(params={

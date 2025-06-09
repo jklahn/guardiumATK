@@ -8,7 +8,30 @@ first 20 rows from the past 30 days of the report. The API returns a list of dic
 the report. Pandas is then used to make it look pretty in a tabular format.
 
 """
-guardium_api = GuardiumRESTAPI()
+guardium_api = GuardiumRESTAPI(config_yaml_path="./test_config.yaml")
+"""configs can also be passed as a dictionary, example:
+
+config_dict={
+    'api': {
+            'guardium-api-url': 'https://guard.gdemo.com:8443',
+             'oauth-client-id': 'client1',
+             'oauth-client-secret': '81399384-6351-46fd-9cb3-ea7c2501cce3', 
+             'guardium-admin-username': 'admin', 
+             'guardium-admin-password': 'admin password here'}, 
+     'cli': {
+            'guardium-cli-hostname': 'guard.gdemo.com',
+            'guardium-cli-port': '22',
+            'guardium-cli-username': 'cli', 
+            'guardium-cli-password': 'cli password here', 
+            'ssh-proxy': 
+                {'enabled': 'True', 
+                'ssh-proxy-hostname': 'proxy.example.com', 
+                'ssh-proxy-port': '20755', 
+                'ssh-proxy-username': 'proxy username here', 
+                'ssh-proxy-password': 'proxy ssh password here'}
+            }
+    }
+"""
 
 # Example: Running a report using 'online_report' API and making the results look pretty
 result = guardium_api.post_online_report(params={

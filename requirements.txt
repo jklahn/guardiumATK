@@ -1,7 +1,9 @@
-pandas
-setuptools
+pip
+wheel
 cryptography
+setuptools
 future
 requests
 PyYAML
 paramiko
+pandas

@@ -11,7 +11,7 @@ Reference: https://www.ibm.com/docs/en/gdp/12.x?topic=reference-list-policy-rule
 Policy API commands: https://www.ibm.com/docs/en/gdp/12.x?topic=commands-policy-rule-apis
 """
 
-guardium_api = GuardiumRESTAPI()
+guardium_api = GuardiumRESTAPI(config_yaml_path="./test_config.yaml")
 
 result = guardium_api.get_list_of_policy_rules_detailed(params={
     'policyDesc': 'Basic Data Security Policy',  # [str][required]; Name of the policy

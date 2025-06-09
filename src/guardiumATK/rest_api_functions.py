@@ -5,7 +5,7 @@ A library of REST API functions that can be used with a valid GuardiumAPIConnect
 """
 
 from requests import get, post
-from guardiumATK.appliance_connections_creator import GuardiumAPIConnection
+from appliance_connections_creator import GuardiumAPIConnection
 import logging
 
 
@@ -31,9 +31,10 @@ class GuardiumRESTAPI:
 
     """
 
-    def __init__(self):
-        # Starts a valid REST API session by getting an access token using settings in config.yaml file
-        self.guard_api = GuardiumAPIConnection()
+    def __init__(self, config_yaml_path=None, config_dict=None):
+
+        # Starts a valid REST API session
+        self.guard_api = GuardiumAPIConnection(config_yaml_path=config_yaml_path, config_dict=config_dict)
 
     def get_list_parameter_names_by_report_name(self, params, verify=False):
         """

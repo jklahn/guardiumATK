@@ -11,7 +11,7 @@ Policy API commands: https://www.ibm.com/docs/en/gdp/12.x?topic=commands-policy-
 """
 
 
-guardium_api = GuardiumRESTAPI()
+guardium_api = GuardiumRESTAPI(config_yaml_path="./test_config.yaml")
 
 # Example: Add action to existing policy rule
 result = guardium_api.post_policy_rule_action(params={
