@@ -27,7 +27,7 @@ To use Guardium CLI functions: import and create an instance of `GuardiumCLI` cl
 To see more examples, visit the [examples](/examples) directory.
  
 ## Discussion
-File bugs using the [issue tracker](/issues).
+File bugs using the [issue tracker](https://github.com/jklahn/guardiumATK/issues).
 
 Need help? Reach out to us on the
 [Guardium community](https://community.ibm.com/community/user/groups/community-home?CommunityKey=aa1a6549-4b51-421a-9c67-6dd41e65ef85).
