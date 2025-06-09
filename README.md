@@ -3,7 +3,7 @@
 both REST APIs and CLI commands, guardiumATK gives you total programmatic control over your Guardium appliances.
 
 Install `guardiumATK` with:
->pip3 install -e /guardiumATK
+```pip3 install -e /guardiumATK```
 
 ## Usage
 Start by gathering your configuration details to be used when making CLI and REST API calls. This can be done in a 
