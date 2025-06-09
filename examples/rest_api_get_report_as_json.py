@@ -1,4 +1,4 @@
-from guardiumATK.rest_api_functions import GuardiumRESTAPI
+from guardiumATK import rest_api_functions
 import pandas
 """
 
@@ -8,7 +8,7 @@ first 20 rows from the past 30 days of the report. The API returns a list of dic
 the report. Pandas is then used to make it look pretty in a tabular format.
 
 """
-guardium_api = GuardiumRESTAPI(config_yaml_path="./test_config.yaml")
+guardium_api = rest_api_functions.GuardiumRESTAPI(config_yaml_path="./test_config.yaml")
 """configs can also be passed as a dictionary, example:
 
 config_dict={
