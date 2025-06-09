@@ -2,8 +2,13 @@
 `guardiumATK` (Guardium Automation ToolKit) provides a pythonic package to automate tasks in Guardium. Leveraging
 both REST APIs and CLI commands, guardiumATK gives you total programmatic control over your Guardium appliances.
 
-Install `guardiumATK` with:
-```pip3 install -e /guardiumATK```
+Install `guardiumATK`:
+
+- Clone or download the `guardiumATK` project.
+
+- ```pip3 install -e /guardiumATK```
+
+*Note: Manually installing the package through pip is temporary until an official PyPI package is made available.*
 
 ## Usage
 Start by gathering your configuration details to be used when making CLI and REST API calls. This can be done in a 
