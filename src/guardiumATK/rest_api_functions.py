@@ -36,11 +36,12 @@ class GuardiumRESTAPI:
         # Starts a valid REST API session
         self.guard_api = appliance_connections_creator.GuardiumAPIConnection(config_yaml_path=config_yaml_path, config_dict=config_dict)
 
-    def get_list_parameter_names_by_report_name(self, params, verify=False):
+    def get_list_parameter_names_by_report_name(self, params, verify=False, timeout=None):
         """
 
         :param params: reportName
         :param verify: verifies the SSL connection
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
         :return: response: as JSON
         """
 
@@ -48,13 +49,14 @@ class GuardiumRESTAPI:
                        headers={'Content-Type': 'application/json',
                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
                        verify=verify,
-                       params=params)  # Example {'reportName': 'Sessions'}
+                       params=params,
+                       timeout=timeout)  # Example {'reportName': 'Sessions'}
 
         check_for_response_errors(response)
 
         return response.json()
 
-    def post_online_report(self, params, verify=False):
+    def post_online_report(self, params, verify=False, timeout=None):
         """
 
         :param params: as JSON dictionary
@@ -74,6 +76,7 @@ class GuardiumRESTAPI:
                 "HostnameLike": host_name_like
                 "hostLike": host_name_like
         :param verify: verifies the SSL connection
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
         :return: response: a list of dictionaries, where each dictionary represents a row
 
         """
@@ -82,13 +85,14 @@ class GuardiumRESTAPI:
                         headers={'Content-Type': 'application/json',
                                  'Authorization': 'Bearer ' + self.guard_api.access_token},
                         verify=verify,
-                        json=params)
+                        json=params,
+                        timeout=timeout)
 
         check_for_response_errors(response)
 
         return response.json()
 
-    def post_policy_rule_action(self, params, verify=False):
+    def post_policy_rule_action(self, params, verify=False, timeout=None):
         """
         Creates a policy rule action
 
@@ -108,6 +112,7 @@ class GuardiumRESTAPI:
                 'paramSeparator': ''  # str;
             }
 
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
         :param verify: verifies the SSL connection
         :return: response: a list of dictionaries, where each dictionary represents a row
 
@@ -117,13 +122,14 @@ class GuardiumRESTAPI:
                         headers={'Content-Type': 'application/json',
                                  'Authorization': 'Bearer ' + self.guard_api.access_token},
                         verify=verify,
-                        json=params)
+                        json=params,
+                        timeout=timeout)
 
         check_for_response_errors(response)
 
         return response.json()
 
-    def get_list_of_policies(self, params, verify=False):
+    def get_list_of_policies(self, params, verify=False, timeout=None):
         """
         Displays a list of available policies or displays details about a single policy.
 
@@ -143,6 +149,7 @@ class GuardiumRESTAPI:
             }
 
         :param verify: verifies the SSL connection
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
         :return: response: as JSON
         """
 
@@ -150,13 +157,14 @@ class GuardiumRESTAPI:
                        headers={'Content-Type': 'application/json',
                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
                        verify=verify,
-                       params=params)  # Example {'reportName': 'Sessions'}
+                       params=params,  # Example {'reportName': 'Sessions'}
+                       timeout=timeout)
 
         check_for_response_errors(response)
 
         return response.json()
 
-    def get_list_of_policy_rules(self, params, verify=False):
+    def get_list_of_policy_rules(self, params, verify=False, timeout=None):
         """
         Displays a list of rules for a given policy
 
@@ -168,6 +176,7 @@ class GuardiumRESTAPI:
             }
 
         :param verify: verifies the SSL connection
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
         :return: response: as JSON
         """
 
@@ -175,13 +184,14 @@ class GuardiumRESTAPI:
                        headers={'Content-Type': 'application/json',
                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
                        verify=verify,
-                       params=params)  # Example {'reportName': 'Sessions'}
+                       params=params,  # Example {'reportName': 'Sessions'}
+                       timeout=timeout)
 
         check_for_response_errors(response)
 
         return response.json()
 
-    def get_list_of_policy_rules_detailed(self, params, verify=False):
+    def get_list_of_policy_rules_detailed(self, params, verify=False, timeout=None):
         """
         Displays a list of rules for a given policy and includes ALL the details - like actions and continueToNextRule
 
@@ -194,6 +204,7 @@ class GuardiumRESTAPI:
             }
 
         :param verify: verifies the SSL connection
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
         :return: response: as JSON
         """
 
@@ -201,7 +212,8 @@ class GuardiumRESTAPI:
                        headers={'Content-Type': 'application/json',
                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
                        verify=verify,
-                       params=params)  # Example {'reportName': 'Sessions'}
+                       params=params,  # Example {'reportName': 'Sessions'}
+                       timeout=timeout)
 
         check_for_response_errors(response)
 

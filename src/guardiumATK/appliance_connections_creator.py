@@ -78,7 +78,8 @@ class GuardiumAPIConnection:
         response = post(url=self.host_url + '/oauth/token',
                         data=str(oauth_data),
                         verify=False,
-                        headers={'Content-Type': 'application/x-www-form-urlencoded'})
+                        headers={'Content-Type': 'application/x-www-form-urlencoded'},
+                        timeout=30)
 
         logging.info('Getting API access token from ' + self.host_url + '/oauth/token')
 
