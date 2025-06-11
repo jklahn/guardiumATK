@@ -74,4 +74,3 @@ guardium_cli.add_remote_syslog(
             'test_msg': True  # Uses 'show remotelog test' to send a test message and observe it leave in tcpdump
         },
     clear_existing=True)  # clears existing entry for the host + facility.priority if it exists
-

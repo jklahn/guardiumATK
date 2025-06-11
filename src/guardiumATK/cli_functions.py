@@ -152,7 +152,7 @@ class GuardiumCLI:
         if clear_existing:
 
             # clear the facility.priority combo for the host first
-            command = 'store remotelog clear {host}'.format( host=params['host'])
+            command = 'store remotelog clear {host}'.format(host=params['host'])
 
             self.guard_cli.run_cli_cmd(cli_cmd=command, strs_to_match_in_output=['>'])
 
@@ -202,6 +202,7 @@ class GuardiumCLI:
     
             """
 
+        # set message size if the parameter is present
         if params['max_message_size']:
             # store remotelog max_message_size <1|2|3|4|5|6>
             command = 'store remotelog max_message_size {size}'.format(size=params['max_message_size'])
@@ -210,7 +211,30 @@ class GuardiumCLI:
 
             check_for_cli_errors(cmd=command, result=result, success_str='Configuration changed')
 
-        return 'Successfully added remote syslog.'
+        # set to escape (add a '/') the control characters of outgoing messages
+        if params['escape_control_characters']:
+            # store remotelog escape_control_characters_on_receive <on|off>
+            command = ('store remotelog escape_control_characters_on_receive {setting}'.format
+                       (setting=params['escape_control_characters']))
+            self.guard_cli.run_cli_cmd(cli_cmd=command, strs_to_match_in_output=['>'])
+
+        """
+        Example output:
+        
+            store remotelog escape_control_characters_on_receive off
+            Configuration changed. Run 'restart remotelog' to apply.
+            Command ran on: Wed Jun 11 17:27:05 2025
+            ok
+        
+        Example output if already set:
+        
+            store remotelog escape_control_characters_on_receive off
+            Escape control characters is already off
+            Command ran on: Wed Jun 11 17:31:55 2025
+            ok
+            
+        """
 
         #TODO - show remotelog test
-        #TODO - escape_control_characters_on_receive
+
+        return 'Successfully added remote syslog.'
