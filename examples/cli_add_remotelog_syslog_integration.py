@@ -1,7 +1,6 @@
 from guardiumATK import cli_functions
 
 """
-
 The following code creates an instance of Guardium CLI over SSH, using Paramiko. The code allows for using a proxy SSH
 server if needed (this is configured in the config.yaml). Paramiko-expect is then leveraged to run CLI commands and wait
 for the right output on the command line before proceeding. This example uses the 'store_remotelog' to add a remote
@@ -14,6 +13,25 @@ https://www.ibm.com/docs/en/gdp/12.x?topic=system-facility-priority-syslog-messa
 # creates a CLI connection based on settings in the config.yaml
 guardium_cli = cli_functions.GuardiumCLI(display=True, config_yaml_path="./test_config.yaml")
 
+
+# example of adding an unencrypted remote syslog configuration to the appliance
+guardium_cli.add_remote_syslog(
+    params={
+            'encryption': 'non_encrypted',  # [str][required] 'encrypted' | 'non_encrypted'
+            'facility': 'user',  # [str][required] syslog source and topic
+            'priority': 'all',  # [str][required] syslog message priority (urgency)
+            'host': 'raptor.gdemo.com',  # [str][required] -- hostname or IP address
+            'port': '514',  # [str][optional] -- default 514
+            'protocol': 'tcp',  # [str][required]  -- 'udp' or 'tcp'
+            'format': 'default',  # [str][optional]  message format default is syslog
+            'escape_control_characters': 'off',  # [str][optional] escape control characters
+            'max_message_size': None,  # [optional][5k] | '2' [10k]| '3' [15k] | '4' [20k]| '5' [23k] | '6' [64k],
+            'public_cert_pem': None,  # [str] Public CA certificate (.pem) from the rsyslog receiver
+            'send_test_msg': True  # Uses 'show remotelog test' to send a test message and observe it leaving in tcpdump
+        },
+    clear_existing=True)  # clears existing entry for the host + facility.priority if it exists
+
+# For encrypted TCP, you need a CA cert; Don't store this in your code. This is only for example purposes.
 public_ca_pem = """
 -----BEGIN CERTIFICATE-----
 MIIECTCCA3KgAwIBAgIUDnU7Oa0fU9GFOwU7EWJP3HsRchEwDQYJKoZIhvcNAQEL
@@ -41,36 +59,19 @@ q/I2+0j6dAkOGcK/68z7qQXByeGri3n28a1Kn6o=
 -----END CERTIFICATE-----
 """
 
-# add encrypted remote syslog configuration to the appliance
-# guardium_cli.add_remote_syslog(
-#     params={
-#             'encryption': 'encrypted',  # [str][required] 'encrypted' | 'non_encrypted'
-#             'facility': 'daemon',  # [str][required] syslog source and topic
-#             'priority': 'all',  # [str][required] syslog message priority (urgency)
-#             'host': 'raptor.gdemo.com',  # [str][required] -- hostname or IP address
-#             'port': '514',  # [str][optional] -- default 514
-#             'protocol': 'tcp',  # [str][required]  -- 'udp' or 'tcp'
-#             'format': 'default',  # [str][optional]  message format default is syslog
-#             'escape_control_characters': 'off',  # [str][optional] escape control characters
-#             'max_message_size': '6',  # [optional][5k] | '2' [10k]| '3' [15k] | '4' [20k]| '5' [23k] | '6' [64k],
-#             'public_cert_pem': public_ca_pem,  # [str] Public CA certificate (.pem) from the rsyslog receiver
-#             'test_msg': False  # Uses 'show remotelog test' to send a test message and observe it leave in tcpdump
-#         },
-#     clear_existing=False)  # clears existing entry for the host + facility.priority if it exists
-
-# add unencrypted remote syslog configuration to the appliance
+# Example of adding an encrypted remote syslog configuration to the appliance
 guardium_cli.add_remote_syslog(
     params={
-            'encryption': 'non_encrypted',  # [str][required] 'encrypted' | 'non_encrypted'
-            'facility': 'user',  # [str][required] syslog source and topic
+            'encryption': 'encrypted',  # [str][required] 'encrypted' | 'non_encrypted'
+            'facility': 'daemon',  # [str][required] syslog source and topic
             'priority': 'all',  # [str][required] syslog message priority (urgency)
             'host': 'raptor.gdemo.com',  # [str][required] -- hostname or IP address
             'port': '514',  # [str][optional] -- default 514
             'protocol': 'tcp',  # [str][required]  -- 'udp' or 'tcp'
             'format': 'default',  # [str][optional]  message format default is syslog
             'escape_control_characters': 'off',  # [str][optional] escape control characters
-            'max_message_size': None,  # [optional][5k] | '2' [10k]| '3' [15k] | '4' [20k]| '5' [23k] | '6' [64k],
-            'public_cert_pem': None,  # [str] Public CA certificate (.pem) from the rsyslog receiver
-            'test_msg': True  # Uses 'show remotelog test' to send a test message and observe it leave in tcpdump
+            'max_message_size': '6',  # [optional][5k] | '2' [10k]| '3' [15k] | '4' [20k]| '5' [23k] | '6' [64k],
+            'public_cert_pem': public_ca_pem,  # [str] Public CA certificate (.pem) from the rsyslog receiver
+            'send_test_msg': True  # Uses 'show remotelog test' to send a test message and observe it leaving in tcpdump
         },
-    clear_existing=True)  # clears existing entry for the host + facility.priority if it exists
+    clear_existing=False)  # clears existing entry for the host + facility.priority if it exists

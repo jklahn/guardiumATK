@@ -235,6 +235,36 @@ class GuardiumCLI:
             
         """
 
-        #TODO - show remotelog test
+        # test rsyslog config by sending a test message and observing it in the tcpdump output
+        if params['send_test_msg']:
+            # store remotelog max_message_size <1|2|3|4|5|6>
+            command = 'show remotelog test'
+
+            # tests can take a while, so increasing timeout counter to 120
+            result = self.guard_cli.run_cli_cmd(cli_cmd=command, strs_to_match_in_output=['>'], timeout_counter=120)
+
+            """
+            Example output:
+            
+                show remotelog test
+                
+                Remote log receivers are configured.
+                Messages will be written to syslog targeting these
+                   - for facility 'ALL', 'daemon' is used for testing.
+                   - Messages of 'kern' facility cannot be tested
+                   - for priority 'ALL', 'info' is used for testing.
+                
+                The tests could take several minutes... Please wait
+                
+                Testing raptor.gdemo.com:514/tcp for user.debug
+                Got response from raptor.gdemo.com:514/tcp for user.debug
+                Testing raptor.gdemo.com:514/tcp for user.info
+                Got response from raptor.gdemo.com:514/tcp for user.info
+                ...
+                OK:  raptor.gdemo.com:514/tcp for user.*
+                ok
+            """
+
+            check_for_cli_errors(cmd=command, result=result, success_str='ok')
 
         return 'Successfully added remote syslog.'
