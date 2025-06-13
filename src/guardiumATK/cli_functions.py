@@ -183,6 +183,8 @@ class GuardiumCLI:
 
         else:  # not encrypted
 
+            # Example: store remotelog add non_encrypted user.all raptor.gdemo.com:514 tcp default
+
             result = self.guard_cli.run_cli_cmd(cli_cmd=command,
                                                 strs_to_match_in_output=['>'])
 
