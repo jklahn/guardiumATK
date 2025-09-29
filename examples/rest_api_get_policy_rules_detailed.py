@@ -1,5 +1,6 @@
 from guardiumATK import rest_api_functions
 import pandas
+import json
 
 """
 
@@ -29,3 +30,7 @@ print("\nPolicy is truncated table format:")
 pd = pandas
 pd.options.display.width = 0
 print(pandas.DataFrame(result))
+
+for policy in result:
+    pretty_json = json.dumps(policy, indent=4)
+    print(pretty_json)
