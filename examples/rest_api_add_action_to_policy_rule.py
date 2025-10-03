@@ -15,9 +15,9 @@ guardium_api = rest_api_functions.GuardiumRESTAPI(config_yaml_path="./test_confi
 
 # Example: Add action to existing policy rule
 result = guardium_api.post_policy_rule_action(params={
-    'fromPolicy': '-JoshTestPolicy',  # str; required -- policy name
+    'fromPolicy': '-ChuckWasHere',  # str; required -- policy name
     'ruleDesc': 'Log DML',  # str; required -- rule name, Example: 'SQL Error - Log'
-    'actionName': 'LOG FULL DETAILS PER SESSION',  # str; required - Example: 'LOG FULL DETAILS PER SESSION'
+    'actionName': 'LOG MASKED DETAILS',  # str; required - Example: 'LOG FULL DETAILS PER SESSION'
     'actionLevel': '',  # str;
     'actionParameters': '',  # str;
     'alertUserLoginName': '',  # str;

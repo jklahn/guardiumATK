@@ -4,7 +4,7 @@ A library of REST API functions that can be used with a valid GuardiumAPIConnect
 
 """
 
-from requests import get, post
+from requests import get, post, delete
 from guardiumATK import appliance_connections_creator
 import logging
 
@@ -124,6 +124,195 @@ class GuardiumRESTAPI:
                         verify=verify,
                         json=params,
                         timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def post_create_policy(self, params, verify=False, timeout=None):
+        """
+        Creates a new policy
+
+        :param params: as JSON dictionary
+
+            params={
+                'ruleSetDesc': '-ChuckWasHere',  # [str][required]; -- The name of the policy to be created.
+                'baselineDesc': '',  # [str];
+                'categoryName': '',  # [str]; -- Category of the policy, Example: 'Access', 'Activity', 'SOX'
+                'isFam': None,  # [boolean]; -- Determines whether policy is for file access monitoring. Valid values:
+                                # 0 (false): This is a data access monitoring policy.
+                                # 1 (true): This is a file access monitoring policy.
+                'logFlat': '',  # [boolean]; -- Flat logging option for this policy. Valid values:
+                                # 0 (false)
+                                # 1 (true)
+                'pattern': '',  # [str]; -- A regular expression to match.
+                'policyLevel': '',  # [str]; -- REGULAR [DEFAULT], SESSION, FAM, FAM_SP, FAM_NAS, 0, 1, 2, 3, 4
+                'rulesOnFlat': None,  # [boolean]; -- Valid values: 0 (false)[DEFAULT], 1 (true)
+                'securityPolicy': None,  # [boolean]; -- Valid values: 0 (false)[DEFAULT], 1 (true)
+                'api_target_host': ''  # [str]; -- Specifies the target hosts where the API executes
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing POST...")
+        response = post(url=self.guard_api.host_url + '/restAPI/' + 'policy',
+                        headers={'Content-Type': 'application/json',
+                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
+                        verify=verify,
+                        json=params,
+                        timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def post_add_rule_to_policy(self, params, verify=False, timeout=None):
+        """
+        Creates a new policy
+
+        :param params: as JSON dictionary
+
+            params={
+                'fromPolicy': '',  # [str] [required]; -- Policy name to add the rule to
+                'ruleType': '',  # [str] [required]; -- ACCESS, EXCEPTION, EXTRUSION, MASK_ON_SCREEN,
+                    # MASK_ON_DB, MASK_ON_MONGODB, DATASET_COLLECTION_PROFILE, DB2_COLLECTION_PROFILE,
+                    # DB2_BLOCKING_PROFILE, IMS_COLLECTION_PROFILE, SESSION
+                'category': '',  # [str]; -- Access, Activity, Audit, Audit Mode, BASEL II, CCPA, Data Privacy...
+                'classification': '',  # [str];
+                'order': '',  # [int];
+                'ruleDesc': '',  # [str] [required]; -- Unique name for the rule
+                'ruleLevel': '',  # [str];
+                'api_target_host': ''  # [str]; -- Specifies the target hosts where the API executes
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing POST...")
+        response = post(url=self.guard_api.host_url + '/restAPI/' + 'rule',
+                        headers={'Content-Type': 'application/json',
+                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
+                        verify=verify,
+                        json=params,
+                        timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def post_install_policy(self, params, verify=False, timeout=None):
+        """
+        Installs a policy
+
+        :param params: as JSON dictionary
+
+            params={
+                'policy': '-ChuckWasHere',  # [str] [required]; -- The name of the policy or policies to install
+                                            # Use a pipe ( | ) character to separate multiple policies
+                'api_target_host': ''  # [str]; -- Specifies the target hosts where the API executes
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing POST...")
+        response = post(url=self.guard_api.host_url + '/restAPI/' + 'policy_install',
+                        headers={'Content-Type': 'application/json',
+                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
+                        verify=verify,
+                        json=params,
+                        timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def post_uninstall_policy(self, params, verify=False, timeout=None):
+        """
+        Uninstalls a policy
+
+        :param params: as JSON dictionary
+
+            params={
+                'policy': '-ChuckWasHere',  # [str] [required]; -- The name of the policy to uninstall
+                'api_target_host': ''  # [str]; -- Specifies the target hosts where the API executes
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing POST...")
+        response = post(url=self.guard_api.host_url + '/restAPI/' + 'policy_uninstall',
+                        headers={'Content-Type': 'application/json',
+                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
+                        verify=verify,
+                        json=params,
+                        timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def post_reinstall_policy(self, params, verify=False, timeout=None):
+        """
+        Re-installs an existing policy to implement changes
+
+        :param params: as JSON dictionary
+
+            params={
+                'policy': '-ChuckWasHere',  # [str] [required]; -- The name of the policy to re-install
+                'api_target_host': ''  # [str]; -- Specifies the target hosts where the API executes
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing POST...")
+        response = post(url=self.guard_api.host_url + '/restAPI/' + 'reinstall_policy',
+                        headers={'Content-Type': 'application/json',
+                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
+                        verify=verify,
+                        json=params,
+                        timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def delete_policy(self, params, verify=False, timeout=None):
+        """
+        Deletes an existing policy
+
+        :param params: as JSON dictionary
+
+            params={
+                'policyDesc': '-ChuckWasHere',  # [str][required]; -- The name of the policy to be deleted.
+                'api_target_host': ''  # [str]; -- Specifies the target hosts where the API executes
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing DELETE...")
+        response = delete(url=self.guard_api.host_url + '/restAPI/' + 'policy',
+                          headers={'Content-Type': 'application/json',
+                                   'Authorization': 'Bearer ' + self.guard_api.access_token},
+                          verify=verify,
+                          json=params,
+                          timeout=timeout)
 
         check_for_response_errors(response)
 
