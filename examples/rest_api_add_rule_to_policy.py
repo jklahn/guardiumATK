@@ -13,7 +13,7 @@ Policy API commands: https://www.ibm.com/docs/en/gdp/12.x?topic=commands-policy-
 
 guardium_api = rest_api_functions.GuardiumRESTAPI(config_yaml_path="./test_config.yaml")
 
-# Example: Add action to existing policy rule
+# Example: Add rule to existing policy
 result = guardium_api.post_add_rule_to_policy(params={
     'fromPolicy': '-ChuckWasHere',  # [str] [required]; -- Policy name to add the rule to
     'ruleType': 'ACCESS',  # [str] [required]; -- Valid values: ACCESS, EXCEPTION, EXTRUSION, MASK_ON_SCREEN,
