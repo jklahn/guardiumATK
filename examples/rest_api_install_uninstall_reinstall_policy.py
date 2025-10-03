@@ -17,8 +17,9 @@ guardium_api = rest_api_functions.GuardiumRESTAPI(config_yaml_path="./test_confi
 
 # Example: Install a policy
 result = guardium_api.post_install_policy(params={
-    'policy': '-ChuckWasHere',  # [str] [required]; -- The name of the policy or policies to install.
-                                # Use a pipe ( | ) character to separate multiple policies.
+    'policy': '-ChuckWasHere | Basic Data Security Policy',  # [str] [required]; -- The name of the policy or policies
+    # to install. Use a pipe ( | ) character to separate multiple policies.
+    # Note: For multiple policies, the order listed (between pipes) determines installed order.
     'api_target_host': ''  # [str]; -- Specifies the target hosts where the API executes. Example: all_managed
             })
 
