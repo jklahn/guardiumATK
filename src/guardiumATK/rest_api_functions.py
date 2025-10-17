@@ -407,3 +407,160 @@ class GuardiumRESTAPI:
         check_for_response_errors(response)
 
         return response.json()
+
+    def post_create_group(self, params, verify=False, timeout=None):
+        """
+        Creates a group
+
+        :param params: as JSON dictionary
+
+            params={
+                'appid': 'Public',  # [str] [required]; -- Example: Public, Classifier, Policy Builder
+                'category': '',  # [str]; -- optional label that is used to group policy violations for reporting
+                'classification': '',  # [str]; -- optional label that is used to group policy violations for reporting
+                'desc': 'My Custom User Group',  # [str] [required]; -- a unique description for the new group
+                'hierarchical': '',  # [str]; -- true/false; indicates if the group is meant to contain other
+                    groups (hierarchical)
+                'tuple_parameters': '',  # [str]; -- if group type is 'Tuples', use a comma separated list of tuple
+                    parameters to define the tuple. Valid parameters: client_ip, client_host_name, server_ip,
+                    server_host_name, source_program, db_name, db_user, service_name, app_user_name, os_user, db_type,
+                    net_protocol, command, server_port, sender_ip, server_description, analyzed_client_ip, incident,
+                    session, client_os_name, server_os_name, db_prototype, field_name, error_code
+                'type': 'USERS'  # [str] [required]; -- type of group. Examples: COMMANDS, Database Name, OBJECTS, USERS
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing POST...")
+        response = post(url=self.guard_api.host_url + '/restAPI/' + 'group',
+                        headers={'Content-Type': 'application/json',
+                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
+                        verify=verify,
+                        json=params,
+                        timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def get_group_members_by_desc(self, params, verify=False, timeout=None):
+        """
+        Gets the list the members of a group, using the group name as the identifier
+
+        :param params: as JSON dictionary
+
+            params={
+                'desc': 'Sensitive Objects',  # [str] [required]; -- The name of the group to list the members
+                'api_target_host': '%CREDIT'  # [str]; -- Specifies the target hosts where the API executes. Examples:
+                    'all_managed': execute on all managed units but not the central manager
+                    'all': execute on all managed units and the central manager
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing GET...")
+        response = get(url=self.guard_api.host_url + '/restAPI/' + 'group_members_by_group_desc',
+                       headers={'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + self.guard_api.access_token},
+                       verify=verify,
+                       json=params,
+                       timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def delete_group_by_desc(self, params, verify=False, timeout=None):
+        """
+        Deletes a group using the name of the group as the identifier
+
+        :param params: as JSON dictionary
+
+            params={
+                'desc': 'Sensitive Objects',  # [str] [required]; -- The name of the group to be deleted
+                'api_target_host': '%CREDIT'  # [str]; -- Specifies the target hosts where the API executes. Examples:
+                    'all_managed': execute on all managed units but not the central manager
+                    'all': execute on all managed units and the central manager
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing DELETE...")
+        response = delete(url=self.guard_api.host_url + '/restAPI/' + 'group',
+                          headers={'Content-Type': 'application/json',
+                                   'Authorization': 'Bearer ' + self.guard_api.access_token},
+                          verify=verify,
+                          json=params,
+                          timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def post_add_member_to_group_by_desc(self, params, verify=False, timeout=None):
+        """
+        Adds a member to an existing group identified by its description.
+
+        :param params: as JSON dictionary
+
+            params={
+                'desc': 'Sensitive Objects',  # [str] [required]; -- The name of the group to add the member to
+                'member': '%CREDIT'  # [str] [required]; -- The member name (must be unique within the group)
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing POST...")
+        response = post(url=self.guard_api.host_url + '/restAPI/' + 'group_member',
+                        headers={'Content-Type': 'application/json',
+                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
+                        verify=verify,
+                        json=params,
+                        timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def delete_member_from_group_by_desc(self, params, verify=False, timeout=None):
+        """
+        Removes a member from an existing group identified by its description.
+
+        :param params: as JSON dictionary
+
+            params={
+                'desc': 'Sensitive Objects',  # [str] [required]; -- The name of the group to remove the member from
+                'member': '%CREDIT',  # [str] [required]; -- The member name (must be unique within the group)
+                'api_target_host': '%CREDIT'  # [str]; -- Specifies the target hosts where the API executes. Examples:
+                    'all_managed': execute on all managed units but not the central manager
+                    'all': execute on all managed units and the central manager
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing DELETE...")
+        response = delete(url=self.guard_api.host_url + '/restAPI/' + 'group_member',
+                          headers={'Content-Type': 'application/json',
+                                   'Authorization': 'Bearer ' + self.guard_api.access_token},
+                          verify=verify,
+                          json=params,
+                          timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
