@@ -7,6 +7,7 @@ A library of REST API functions that can be used with a valid GuardiumAPIConnect
 from requests import get, post, delete
 from guardiumATK import appliance_connections_creator
 import logging
+from urllib import parse
 
 
 def check_for_response_errors(result):
@@ -450,11 +451,50 @@ class GuardiumRESTAPI:
         """
         Gets the list the members of a group, using the group name as the identifier
 
+        # NOTE: This GET REST API differs from others in Guardium in that parameters are passed via URL instead of JSON
+
         :param params: as JSON dictionary
 
             params={
                 'desc': 'Sensitive Objects',  # [str] [required]; -- The name of the group to list the members
-                'api_target_host': '%CREDIT'  # [str]; -- Specifies the target hosts where the API executes. Examples:
+                'api_target_host': 'all'  # [str]; -- Specifies the target hosts where the API executes. Examples:
+                    'all_managed': execute on all managed units but not the central manager
+                    'all': execute on all managed units and the central manager
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+
+        if params['api_target_host']:  # If there is a target host specified
+            params_str: str = ("desc=" + parse.quote(params['desc']) +  # quote will add %20 if there's a space
+                               "&api_target_host=" + parse.quote(params['api_target_host'])
+                               )
+        else:
+            params_str: str = ("desc=" + parse.quote(params['desc']))  # quote will add %20 if there's a space
+
+        print("Performing GET...")
+        response = get(url=self.guard_api.host_url + '/restAPI/' + 'group_members_by_group_desc?' + params_str,
+                       headers={'Content-Type': 'application/x-www-form-urlencoded',
+                                'Authorization': 'Bearer ' + self.guard_api.access_token},
+                       verify=verify,
+                       timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def get_group_members_by_id(self, params, verify=False, timeout=None):
+        """
+        Gets the list the members of a group, using the group id as the identifier
+
+        :param params: as JSON dictionary
+
+            params={
+                'id': '5',  # [str] [required]; -- The id of the group to list the members
+                'api_target_host': ''  # [str]; -- Specifies the target hosts where the API executes. Examples:
                     'all_managed': execute on all managed units but not the central manager
                     'all': execute on all managed units and the central manager
             }
@@ -465,7 +505,37 @@ class GuardiumRESTAPI:
 
         """
         print("Performing GET...")
-        response = get(url=self.guard_api.host_url + '/restAPI/' + 'group_members_by_group_desc',
+        response = get(url=self.guard_api.host_url + '/restAPI/' + 'group_members_by_group_id',
+                       headers={'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + self.guard_api.access_token},
+                       verify=verify,
+                       json=params,
+                       timeout=timeout)
+
+        check_for_response_errors(response)
+
+        return response.json()
+
+    def get_group_properties_by_desc(self, params, verify=False, timeout=None):
+        """
+        Gets the displays the properties of a group identified by its description using list_group_by_desc API
+
+        :param params: as JSON dictionary
+
+            params={
+                'desc': 'Sensitive Objects',  # [str] [required]; -- The name of the group
+                'api_target_host': ''  # [str]; -- Specifies the target hosts where the API executes. Examples:
+                    'all_managed': execute on all managed units but not the central manager
+                    'all': execute on all managed units and the central manager
+            }
+
+        :param timeout: [int] number of seconds Requests will wait for your client to establish a connection
+        :param verify: verifies the SSL connection
+        :return: response: a list of dictionaries, where each dictionary represents a row
+
+        """
+        print("Performing GET...")
+        response = get(url=self.guard_api.host_url + '/restAPI/' + 'group',
                        headers={'Content-Type': 'application/json',
                                 'Authorization': 'Bearer ' + self.guard_api.access_token},
                        verify=verify,
@@ -484,7 +554,7 @@ class GuardiumRESTAPI:
 
             params={
                 'desc': 'Sensitive Objects',  # [str] [required]; -- The name of the group to be deleted
-                'api_target_host': '%CREDIT'  # [str]; -- Specifies the target hosts where the API executes. Examples:
+                'api_target_host': ''  # [str]; -- Specifies the target hosts where the API executes. Examples:
                     'all_managed': execute on all managed units but not the central manager
                     'all': execute on all managed units and the central manager
             }
@@ -543,7 +613,7 @@ class GuardiumRESTAPI:
             params={
                 'desc': 'Sensitive Objects',  # [str] [required]; -- The name of the group to remove the member from
                 'member': '%CREDIT',  # [str] [required]; -- The member name (must be unique within the group)
-                'api_target_host': '%CREDIT'  # [str]; -- Specifies the target hosts where the API executes. Examples:
+                'api_target_host': ''  # [str]; -- Specifies the target hosts where the API executes. Examples:
                     'all_managed': execute on all managed units but not the central manager
                     'all': execute on all managed units and the central manager
             }
