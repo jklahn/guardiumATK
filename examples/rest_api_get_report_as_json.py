@@ -35,12 +35,14 @@ config_dict={
 
 # Example: Running a report using 'online_report' API and making the results look pretty
 result = guardium_api.post_online_report(params={
-    'reportName': 'Sessions',
-    'indexFrom': 1,
-    'fetchSize': 20,
+    'reportName': 'Sessions',  # [str] [required] -- the name of the required report
+    'indexFrom': 1,  # [int] [required] -- an integer of the starting index for the first record to be retrieved in the
+    # current fetch operation. To fetch subsequent parts of the data, increment the offset by the previous fetch size.
+    # Index starts at '1' (not '0')
+    'fetchSize': 20,  # [int] [required] -- an integer of number of rows returned for a report. Default is 20 rows.
     'sortColumn': '',
     'sortType': '',
-    'reportParameter': {
+    'reportParameter': {  # report_parameters -- additional (nested) JSON dictionary using the parameters below:
         'QUERY_FROM_DATE': 'NOW -30 DAY',
         'QUERY_TO_DATE': 'NOW',
         'SHOW_ALIASES': 'TRUE',
@@ -52,4 +54,6 @@ result = guardium_api.post_online_report(params={
 })
 
 # converts the list of dictionaries into a pretty table
+pandas.options.display.max_columns = 12  # Max amount of columns to display
+pandas.options.display.width = 999  # Prevents wrapping of columns
 print(pandas.DataFrame(result))
